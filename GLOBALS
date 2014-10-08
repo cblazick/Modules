@@ -1,0 +1,12 @@
+# these global variables are imported by all modules
+# therefor most configuration for different sites
+# should be able to be done within this file
+
+AUTHOR = "Chris Blazick"
+
+DEBUG = True
+DEV_EMAILS = ["admin@example.com"] # used to contact the dev team, i.e to send execuution logs
+DEFAULT_EMAIL_DOMAIN = "example.com" # used to try and resolve partial user accounts, i.e. "chris" becomes "chris@example.com"
+
+# testing variable, shouldn't change
+TEST = "test"
