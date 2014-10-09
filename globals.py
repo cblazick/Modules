@@ -13,3 +13,5 @@ def run():
         val = eval(val.strip())
 
         globals()[var] = val
+
+run()
