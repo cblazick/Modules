@@ -4,7 +4,7 @@
 
 # General
 AUTHOR = "Chris Blazick"
-DEBUG = True
+DEBUG = False
 
 # Email
 DEV_EMAILS = ["admin@example.com"   ] # used to contact the dev team, i.e to send execuution logs
