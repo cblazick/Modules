@@ -13,4 +13,3 @@ EMAIL_SEND_METHOD = 1                 # "SMTP" = 1, "msmtp" = 2, "sendmail" = 3
 
 # testing variable, shouldn't change
 TEST = "test"
-TEST2 = "test"
