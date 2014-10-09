@@ -2,11 +2,14 @@
 # therefor most configuration for different sites
 # should be able to be done within this file
 
+# General
 AUTHOR = "Chris Blazick"
-
 DEBUG = True
-DEV_EMAILS = ["admin@example.com"] # used to contact the dev team, i.e to send execuution logs
-DEFAULT_EMAIL_DOMAIN = "example.com" # used to try and resolve partial user accounts, i.e. "chris" becomes "chris@example.com"
+
+# Email
+DEV_EMAILS = ["admin@example.com"   ] # used to contact the dev team, i.e to send execuution logs
+DEFAULT_EMAIL_DOMAIN = "example.com"  # used to try and resolve partial user accounts, i.e. "chris" becomes "chris@example.com"
+EMAIL_SEND_METHOD = 1                 # "SMTP" = 1, "msmtp" = 2, "sendmail" = 3
 
 # testing variable, shouldn't change
 TEST = "test"

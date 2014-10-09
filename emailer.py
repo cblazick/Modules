@@ -5,13 +5,12 @@ import smtplib, socket
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import subprocess
+import globals
 
 METHODS = { "SMTP" : 1,    # using the standard smtplib.SMTP() call
             "msmtp" : 2,   # nas4free uses msmtp to send email. it doesn't receive smtp connections, it only sends them
             "sendmail" : 3
 }
-DEFAULT_METHOD = 2 # for my nas4free machine.  should be changed (probably to "1")
-                   # when a more traditional machine is used
 
 class Emailer:
     """
@@ -31,7 +30,7 @@ class Emailer:
         self.body = b
 
         if method is None:
-            self.method = DEFAULT_METHOD
+            self.method = globals.EMAIL_SEND_METHOD
         else:
             self.method = method
 
@@ -115,6 +114,6 @@ class Emailer:
 
 def sendMail(fromLine, toLine, subject, body, method=None):
     if method is None:
-        method = DEFAULT_METHOD
+        method = globals.EMAIL_SEND_METHOD
     e = Emailer(fromLine, toLine, subject, body, method)
     e.send
