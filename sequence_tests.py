@@ -32,5 +32,19 @@ class Modules_testSuite(unittest.TestCase):
 
         self.assertEqual(S.frame_list_2_string(frameList), "1-5,8-14x2,20,21,23,26,30")
 
+    def test_Sequence_string_2_frame_list(self):
+
+        self.assertEqual(S.string_2_frame_list("1-10"),
+                         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+        self.assertEqual(S.string_2_frame_list("100-500x100"),
+                         [100, 200, 300, 400, 500])
+
+        self.assertEqual(S.string_2_frame_list("1-5,8-14x2,20,21,23,26,30"),
+                         [1, 2, 3, 4, 5, 8, 10, 12, 14, 20, 21, 23, 26, 30])
+
+        self.assertEqual(S.string_2_frame_list("-5-5"),
+                         [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5])
+
 if __name__ == "__main__":
     unittest.main()
