@@ -49,5 +49,15 @@ class Modules_testSuite(unittest.TestCase):
         self.assertEqual(S.string_2_frame_list("-5-5"),
                          [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5])
 
+        self.assertEqual(S.string_2_frame_list("-10--5"),
+                         [-10, -9, -8, -7, -6, -5])
+
+        self.assertEqual(S.string_2_frame_list("0-20x4"),
+                         [0, 4, 8, 12, 16, 20])
+
+        self.assertRaises(S.String2FrameListException,
+                          S.string_2_frame_list,
+                          "0-20x")
+
 if __name__ == "__main__":
     unittest.main()

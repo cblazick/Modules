@@ -77,6 +77,11 @@ def frame_list_2_string(inlist):
     return rval
 # /frame_list_2_string
 
+
+class String2FrameListException(Exception):
+    pass
+
+
 def string_2_frame_list(instring):
     """
     takes in a string representing a human-readable sequence of numbers
@@ -87,45 +92,73 @@ def string_2_frame_list(instring):
     remainder = instring
     rval = []
 
-    def popNumber(inv):
+    def pop_front_number(inv):
+        """
+        remove the next number from the front of the string
+        returns the popped a tuple containing the popped number and the remainder of the string
         """
 
-        """
+        # short circuit
+        if len(inv) == 0:
+            return (None, inv)
 
         # initialize variables
         is_neg = False
         num = None
 
+        # check if the first character is negative
         if inv[0] == '-':
             is_neg = True
             inv = inv[1:]
+
+        # find the end of the first number which is still a digit
         while len(inv) > 0 and inv[0].isdigit():
             if num == None:
                 num = 0
             num = num * 10 + int(inv[0])
             inv = inv[1:]
+
+        # if the number was negative, bake that back into the return val
         if is_neg:
             num = num * -1
+
         return (num, inv)
 
+    # loop while there is still string to work on
     lastnumber = None
     while len(remainder) > 0:
+        # check if we have a number that needs to be popped off the front
         if remainder[0].isdigit() or (remainder[0] == "-" and lastnumber is None):
-            (lastnumber, remainder) = popNumber(remainder)
+            (lastnumber, remainder) = pop_front_number(remainder)
+
+            # this was the last number, so append it and continue to break out of the while
             if remainder == "":
                 rval.append(lastnumber)
+                continue
+
+        # there is a last number, so this - represents a sequence
         elif remainder[0] == "-":
-            (thisnumber, remainder) = popNumber(remainder[1:])
+            (thisnumber, remainder) = pop_front_number(remainder[1:])
             if thisnumber is None:
                 continue
+
+            # if there is a x after the sequence representing a step factor, process it
             if len(remainder) > 0 and remainder[0] == "x":
-                (step, remainder) = popNumber(remainder[1:])
-                # if step is None:
-                #     genericErr()
+                (step, remainder) = pop_front_number(remainder[1:])
+                if step is None:
+                    raise String2FrameListException("step value missing")
+
+                # we have a valid sequence, append the numbers
                 rval += range(lastnumber, thisnumber + 1, step)
+
+            # there is no step value, so assume 1
             else:
                 rval += range(lastnumber, thisnumber + 1)
+
             lastnumber = None
+
+        # if there is a remainder with additional sequences to process
+        # remove the comma and let the loop continue
         elif remainder[0] == ",":
             if lastnumber is not None:
                 rval.append(lastnumber)
