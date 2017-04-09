@@ -75,5 +75,64 @@ def frame_list_2_string(inlist):
                 series = False
 
     return rval
-
 # /frame_list_2_string
+
+def string_2_frame_list(instring):
+    """
+    takes in a string representing a human-readable sequence of numbers
+     returns a list with each frame represented as a number
+    """
+
+    # initialize variables
+    remainder = instring
+    rval = []
+
+    def popNumber(inv):
+        """
+
+        """
+
+        # initialize variables
+        is_neg = False
+        num = None
+
+        if inv[0] == '-':
+            is_neg = True
+            inv = inv[1:]
+        while len(inv) > 0 and inv[0].isdigit():
+            if num == None:
+                num = 0
+            num = num * 10 + int(inv[0])
+            inv = inv[1:]
+        if is_neg:
+            num = num * -1
+        return (num, inv)
+
+    lastnumber = None
+    while len(remainder) > 0:
+        if remainder[0].isdigit() or (remainder[0] == "-" and lastnumber is None):
+            (lastnumber, remainder) = popNumber(remainder)
+            if remainder == "":
+                rval.append(lastnumber)
+        elif remainder[0] == "-":
+            (thisnumber, remainder) = popNumber(remainder[1:])
+            if thisnumber is None:
+                continue
+            if len(remainder) > 0 and remainder[0] == "x":
+                (step, remainder) = popNumber(remainder[1:])
+                # if step is None:
+                #     genericErr()
+                rval += range(lastnumber, thisnumber + 1, step)
+            else:
+                rval += range(lastnumber, thisnumber + 1)
+            lastnumber = None
+        elif remainder[0] == ",":
+            if lastnumber is not None:
+                rval.append(lastnumber)
+            remainder = remainder[1:]
+        else:
+            remainder = remainder[1:]
+
+    return rval
+# /frameString2List
+
