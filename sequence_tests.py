@@ -16,6 +16,9 @@ class Modules_testSuite(unittest.TestCase):
         self.assertEqual(S.frame_list_2_string(frameList), "1-10")
         self.assertEqual(S.frame_list_2_string(unsortedList), "1-10")
 
+        self.assertEqual(S.frame_list_2_string([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]),
+                         "-5-5")
+
         frameList = [2, 4, 6, 8, 10]
 
         self.assertEqual(S.frame_list_2_string(frameList), "2-10x2")
