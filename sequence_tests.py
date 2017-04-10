@@ -59,5 +59,44 @@ class Modules_testSuite(unittest.TestCase):
                           S.string_2_frame_list,
                           "0-20x")
 
+    def test_sequence_string_2_padding(self):
+
+        self.assertEqual(S.string_2_padding("10-50#"), 4)
+        self.assertEqual(S.string_2_padding("200-300@@"), 2)
+        self.assertEqual(S.string_2_padding("1-100@@@@@"), 5)
+        self.assertEqual(S.string_2_padding("0500"), 4)
+        self.assertEqual(S.string_2_padding("1-10%04"), 4)
+        self.assertEqual(S.string_2_padding("00100-00500"), 5)
+        self.assertEqual(S.string_2_padding("100-00500"), 5)
+
+        self.assertRaises(S.String2PaddingException,
+                          S.string_2_padding,
+                          "1-100#@@@@")
+
+    def test_Sequence_sequence_class(self):
+
+        self.assertRaises(S.SequenceFormatException,
+                          S.sequence,
+                          "")
+
+        self.assertRaises(S.SequenceFormatException,
+                          S.sequence,
+                          ["one", "two"])
+
+        s = S.sequence("/directory/file.1-10#.exr")
+
+        self.assertEqual(s.directory, "/directory")
+        self.assertEqual(s.padding, 4)
+        self.assertEqual(s.isSingleFile(), False)
+        self.assertEqual(s.frames, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        self.assertEqual(s.prefix, "file")
+        self.assertEqual(s.lsep, ".")
+        self.assertEqual(s.rsep, ".")
+        self.assertEqual(s.ext, "exr")
+
+        # NEEDED: a test if a glob is used, the frames still populate
+        # NEEDED: isContiguous test
+        # NEEDED: filesExist test
+
 if __name__ == "__main__":
     unittest.main()
