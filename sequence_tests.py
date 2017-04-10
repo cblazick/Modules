@@ -4,10 +4,61 @@ import unittest
 sys.path.append(os.path.abspath(os.path.join(__file__, "../.."))) # jump out one level to import Modules as would happen typically
 import sequence as S
 
-class Modules_testSuite(unittest.TestCase):
+
+class Modules_test_sequence_class(unittest.TestCase):
     """
     testing routines for the Modules package
     """
+
+    def setUp(self):
+        self.testdir = "./test_dir"
+        self.testdir = os.path.abspath(self.testdir)
+
+        for i in range(1, 15 + 1):
+            f = open(os.path.join(self.testdir, "image_file.%05d.jpg" % (i)), "w")
+            f.close()
+
+
+    def runTest(self):
+        self.assertRaises(S.SequenceFormatException,
+                          S.sequence,
+                          "")
+
+        self.assertRaises(S.SequenceFormatException,
+                          S.sequence,
+                          ["one", "two"])
+
+        s = S.sequence("/directory/file.1-10#.exr")
+
+        self.assertEqual(s.directory, "/directory")
+        self.assertEqual(s.padding, 4)
+        self.assertEqual(s.isSingleFile(), False)
+        self.assertEqual(s.frames, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        self.assertEqual(s.prefix, "file")
+        self.assertEqual(s.lsep, ".")
+        self.assertEqual(s.rsep, ".")
+        self.assertEqual(s.ext, "exr")
+
+        s = S.sequence("/directory/file.*.exr")
+
+        self.assertEqual(s.padding, None)
+        self.assertEqual(s.frames, [])
+
+        path = os.path.join(self.testdir, "image_file.*.jpg")
+        s = S.sequence(path)
+
+        self.assertEqual(s.padding, 5)
+        self.assertEqual(s.frames, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+
+        # NEEDED: isContiguous test
+        # NEEDED: filesExist test
+
+    def tearDown(self):
+        for i in range(1, 15 + 1):
+            os.unlink(os.path.join(self.testdir, "image_file.%05d.jpg" % (i)))
+
+
+class Modules_simpleTestSuite(unittest.TestCase):
 
     def test_Sequence_frame_list_2_string(self):
         frameList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -72,31 +123,6 @@ class Modules_testSuite(unittest.TestCase):
         self.assertRaises(S.String2PaddingException,
                           S.string_2_padding,
                           "1-100#@@@@")
-
-    def test_Sequence_sequence_class(self):
-
-        self.assertRaises(S.SequenceFormatException,
-                          S.sequence,
-                          "")
-
-        self.assertRaises(S.SequenceFormatException,
-                          S.sequence,
-                          ["one", "two"])
-
-        s = S.sequence("/directory/file.1-10#.exr")
-
-        self.assertEqual(s.directory, "/directory")
-        self.assertEqual(s.padding, 4)
-        self.assertEqual(s.isSingleFile(), False)
-        self.assertEqual(s.frames, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-        self.assertEqual(s.prefix, "file")
-        self.assertEqual(s.lsep, ".")
-        self.assertEqual(s.rsep, ".")
-        self.assertEqual(s.ext, "exr")
-
-        # NEEDED: a test if a glob is used, the frames still populate
-        # NEEDED: isContiguous test
-        # NEEDED: filesExist test
 
 if __name__ == "__main__":
     unittest.main()

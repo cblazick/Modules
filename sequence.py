@@ -1,4 +1,5 @@
 import os, sys
+import glob
 
 # all acceptable delineations that go between the frame number and the file extension
 RIGHT_SEP = "." 
@@ -394,6 +395,47 @@ class sequence(object):
             self.getFrames()
 
         return
+
+    def getFrames(self):
+        """
+        retrieve the frame numbers for an already set file sequence description
+        e.g file.*.exr
+        warning: this function updates the class and only returns a success boolean
+        """
+
+        # create and run a glob to determin all files in the sequence
+        myglob = ''.join([self.directory, os.sep, self.prefix, self.lsep, "*", self.rsep, self.ext])
+        g = glob.glob(myglob)
+
+        # short circuit if nothing found
+        if len(g) == 1 and g[0] == self.glob:
+            return []
+
+        frames = []
+        padding = None
+        # run through the resulting files
+        for file in g:
+
+            # run this file path through the sequence class again to extract its frame
+            s = seq(file)
+
+            #short circuit, no information to be extracted
+            if s.frames == []:
+                self.frames = []
+                return False
+
+            # add this frame to our list
+            frames.append(s.frames[0])
+            pad = s.padding
+
+            # update this sequences padding from the file path
+            if self.padding is None or pad < self.padding:
+                self.padding = pad
+
+        # make sure the current frames is updated with a sorted list
+        self.frames = sorted(frames)
+
+        return True
 
     def isSingleFile(self):
         """
