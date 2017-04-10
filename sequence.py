@@ -396,6 +396,26 @@ class sequence(object):
 
         return
 
+    def frame(self, framenum):
+        """
+        return the path to the given frame with the correct padding
+        """
+
+        # attempt to normalize the input
+        if type(framenum) != type(1):
+            try:
+                framenum = int(framenum)
+            except:
+                raise TypeError("argument for frame() should be an integer not %s" % (type(framenum)))
+
+        # assemble the filename from the class values
+        filepath = os.path.join(self.directory,
+                                self.prefix + self.lsep + "%%0%dd" + self.rsep + self.ext)
+        filepath %= self.padding
+        filepath %= framenum
+
+        return filepath
+
     def getFrames(self):
         """
         retrieve the frame numbers for an already set file sequence description
@@ -466,6 +486,27 @@ class sequence(object):
         if len(self.frames) < 2:
             return True
         return False
+
+    def isValid(self):
+        """
+        returns true if all files in the sequence exist for the frame range in the class
+        """
+
+        # short-circuit if this "sequence" is just a single file
+        if self.padding is None or self.frames == []:
+            if os.path.exists(str(self)):
+                return True
+            else:
+                return False
+
+        # otherwise, test if every file exists
+        else:
+            for eachFrame in self.frames:
+                file = self.frame(eachFrame)
+                if not os.path.exists(file):
+                    return False
+        return True
+
 
 # /sequence class
 
