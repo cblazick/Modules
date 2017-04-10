@@ -58,9 +58,9 @@ class Modules_test_sequence_class(unittest.TestCase):
             os.unlink(os.path.join(self.testdir, "image_file.%05d.jpg" % (i)))
 
 
-class Modules_simpleTestSuite(unittest.TestCase):
+class Modules_test_sequence_frame_list_2_strin(unittest.TestCase):
 
-    def test_Sequence_frame_list_2_string(self):
+    def runTest(self):
         frameList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         unsortedList = [4, 8, 2, 5, 7, 1, 9, 10, 3, 6]
 
@@ -86,7 +86,9 @@ class Modules_simpleTestSuite(unittest.TestCase):
 
         self.assertEqual(S.frame_list_2_string(frameList), "1-5,8-14x2,20,21,23,26,30")
 
-    def test_Sequence_string_2_frame_list(self):
+class Modules_test_sequence_string_2_frame_list(unittest.TestCase):
+
+    def runTest(self):
 
         self.assertEqual(S.string_2_frame_list("1-10"),
                          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
@@ -110,7 +112,9 @@ class Modules_simpleTestSuite(unittest.TestCase):
                           S.string_2_frame_list,
                           "0-20x")
 
-    def test_sequence_string_2_padding(self):
+class Modules_test_sequence_string_2_padding(unittest.TestCase):
+
+    def runTest(self):
 
         self.assertEqual(S.string_2_padding("10-50#"), 4)
         self.assertEqual(S.string_2_padding("200-300@@"), 2)
