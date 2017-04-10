@@ -437,6 +437,26 @@ class sequence(object):
 
         return True
 
+    def isContiguous(self):
+        """
+        returns true if there are no gaps in the frames, e.g. 1-20, not 2-20x2 or 1-10,12-20
+        """
+
+        # short circuit if the sequence is only a single file
+        if len(self.frames) < 2:
+            return True
+
+        lastFrame = self.frames[0]
+        for eachFrame in self.frames[1:]:
+
+            # only a step of one frame is acceptible
+            if eachFrame != lastFrame + 1:
+                return False
+
+            lastFrame = eachFrame
+        return True
+
+
     def isSingleFile(self):
         """
         returns if this object describes a single file

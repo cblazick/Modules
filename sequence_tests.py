@@ -38,6 +38,12 @@ class Modules_test_sequence_class(unittest.TestCase):
         self.assertEqual(s.lsep, ".")
         self.assertEqual(s.rsep, ".")
         self.assertEqual(s.ext, "exr")
+        self.assertEqual(s.isContiguous(), True)
+
+        s = S.sequence("/directory/file.1-10,13-20.exr")
+
+        self.assertEqual(s.isContiguous(), False)
+        self.assertEqual(s.padding, 2)
 
         s = S.sequence("/directory/file.*.exr")
 
@@ -50,7 +56,7 @@ class Modules_test_sequence_class(unittest.TestCase):
         self.assertEqual(s.padding, 5)
         self.assertEqual(s.frames, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
 
-        # NEEDED: isContiguous test
+        self.assertEqual(s.isContiguous(), True)
         # NEEDED: filesExist test
 
     def tearDown(self):
