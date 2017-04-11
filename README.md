@@ -2,7 +2,7 @@
 <hr>
 
 <h3>Python modules I've written to make my, and anyone elses, life easier</h3>
-
+<br>
 <p>ansi - off the shelf module to do simple terminal text manipulations
         (e.g. color, blink, etc.)</p>
 <p>didYouMean - used for brute force generating common typos and
