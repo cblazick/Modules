@@ -28,10 +28,20 @@ class Modules_test_sequence_class(unittest.TestCase):
                           S.sequence,
                           ["one", "two"])
 
+        s = S.sequence("/directory/file.1#.exr")
+
+        self.assertEqual(s.frames, [1])
+        self.assertEqual(str(s), "/directory/file.0001.exr")
+
+        s = S.sequence("/directory/file.1.exr")
+
+        self.assertEqual(str(s), "/directory/file.1.exr")
+
         s = S.sequence("/directory/file.1-10#.exr")
 
         self.assertEqual(s.directory, "/directory")
         self.assertEqual(s.padding, 4)
+        self.assertEqual(s.asShakePadding(), "#")
         self.assertEqual(s.isSingleFile(), False)
         self.assertEqual(s.frames, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
         self.assertEqual(s.prefix, "file")
@@ -41,11 +51,21 @@ class Modules_test_sequence_class(unittest.TestCase):
         self.assertEqual(s.isContiguous(), True)
         self.assertEqual(s.frame(5), "/directory/file.0005.exr")
         self.assertEqual(s.isValid(), False)
+        self.assertEqual(str(s), "/directory/file.1-10#.exr")
 
         s = S.sequence("/directory/file.1-10,13-20.exr")
 
         self.assertEqual(s.isContiguous(), False)
         self.assertEqual(s.padding, 2)
+        self.assertEqual(s.asShakePadding(), "@@")
+
+        s = S.sequence("/directory/quicktime.mov")
+
+        self.assertEqual(s.isContiguous(), True)
+        self.assertEqual(s.padding, None)
+        self.assertEqual(s.frames, [])
+        self.assertEqual(s.isValid(), False)
+        self.assertEqual(str(s), "/directory/quicktime.mov")
 
         s = S.sequence("/directory/file.*.exr")
 
@@ -56,6 +76,7 @@ class Modules_test_sequence_class(unittest.TestCase):
         s = S.sequence(path)
 
         self.assertEqual(s.padding, 5)
+        self.assertEqual(s.asShakePadding(), "@@@@@")
         self.assertEqual(s.frames, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
         self.assertEqual(s.frame(5), os.path.join(self.testdir, "image_file.00005.jpg"))
         self.assertEqual(s.isContiguous(), True)

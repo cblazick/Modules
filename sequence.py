@@ -142,7 +142,12 @@ def string_2_frame_list(instring):
             (lastnumber, remainder) = pop_front_number(remainder)
 
             # this was the last number, so append it and continue to break out of the while
-            if remainder == "":
+            nonumbers = True
+            for each in remainder:
+                if each.isdigit():
+                    nonumbers = False
+
+            if remainder == "" or nonumbers:
                 rval.append(lastnumber)
                 continue
 
@@ -338,7 +343,7 @@ class sequence(object):
                     numlen = len(framepiece)
                     lsep = each
 
-        # if we faile to find a number part (e.g. with a single mov
+        # if we fail to find a number part (e.g. with a single mov
         # file), set value
         if noframes:
             prefix = left
@@ -396,6 +401,55 @@ class sequence(object):
 
         return
 
+    def __str__(self):
+        """
+        returns the sequence as a human-readable format
+        """
+
+        # if this represents a single file, not of a sequence
+        if len(self.frames) == 0 or self.padding is None:
+            return os.path.join(self.directory,
+                                self.prefix + self.lsep + self.rsep + self.ext)
+
+        # if this represents a single file, of a sequence, without padding
+        elif len(self.frames) == 1 and self.padding is None:
+            return os.path.join(self.directory,
+                                self.prefix + self.lsep + str(self.frames[0]) + self.rsep + self.ext)
+
+        # if this represents a single file, of a sequence, with padding
+        elif len(self.frames) == 1:
+            return self.frame(self.frames[0])
+
+        # otherwise, this is a whole sequence
+        else:
+            s = os.path.join(self.directory, self.prefix + self.lsep)
+            s += frame_list_2_string(self.frames)
+
+            if self.padding is not None:
+                s += self.asShakePadding()
+            s += self.rsep + self.ext
+
+            return s
+
+    def __repr__(self):
+        """
+        returns similar to str()
+        """
+
+        return "'" + self.__str__() + "'"
+
+    def asShakePadding(self):
+        """
+        return the frame padding in the style used by Shake
+        """
+
+        if self.padding is None:
+            return ''
+        if self.padding == 4:
+            return "#"
+        else:
+            return "@" * self.padding
+
     def frame(self, framenum):
         """
         return the path to the given frame with the correct padding
@@ -439,7 +493,7 @@ class sequence(object):
             # run this file path through the sequence class again to extract its frame
             s = seq(file)
 
-            #short circuit, no information to be extracted
+            # short circuit, no information to be extracted
             if s.frames == []:
                 self.frames = []
                 return False
