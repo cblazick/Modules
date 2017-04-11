@@ -97,9 +97,9 @@ class Emailer:
         s = subprocess.Popen('sendmail ' + " ".join(self.toLine), shell=True, stdin=subprocess.PIPE)
         s.communicate(message.as_string())
 
-    def sendFunc(self):
+    def send(self):
         """
-        switches between functions to cheive the desired method
+        switches between functions to achieve the desired method
         """
 
         if self.method == METHODS["SMTP"]:
@@ -109,11 +109,9 @@ class Emailer:
         elif self.method == METHODS["sendmail"]:
             self.sendMail_sendmail()
 
-    # PROPERTIES
-    send = property(sendFunc, None, None, "used for activating the send mail")
 
 def sendMail(fromLine, toLine, subject, body, method=None):
     if method is None:
         method = globals.EMAIL_SEND_METHOD
     e = Emailer(fromLine, toLine, subject, body, method)
-    e.send
+    e.send()
