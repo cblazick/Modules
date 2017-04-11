@@ -11,5 +11,5 @@
         messages and attachments in the future</p>
 <p>globals - universal globals to allow configuring common values on
         multiple packages at once.  edit GLOBALS for your application</p>
-<p>sequence - used to input file sequences in human reqdable format and do
+<p>sequence - used to input file sequences in human readable format and do
         operations such as transforming it to other style descriptions</p>
