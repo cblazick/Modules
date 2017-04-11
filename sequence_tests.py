@@ -70,6 +70,7 @@ class Modules_test_sequence_class(unittest.TestCase):
         s = S.sequence("/directory/file.*.exr")
 
         self.assertEqual(s.padding, None)
+        self.assertEqual(s.asShakePadding(), '')
         self.assertEqual(s.frames, [])
 
         path = os.path.join(self.testdir, "image_file.*.jpg")
