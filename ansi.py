@@ -15,14 +15,16 @@
 import re
 from functools import partial
 
-__version__ = '2.0.1'
+__version__ = '1.0.2'
 
+# Define the available colors and styles
 COLORS = ('black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white')
 STYLES = ('bold', 'faint', 'italic', 'underline', 'blink', 'blink2', 'negative', 'concealed', 'crossed')
 
 def color(s, fg=None, bg=None, style=None):
     sgr = []
 
+    # Handle foreground color
     if fg:
         if fg in COLORS:
             sgr.append(str(30 + COLORS.index(fg)))
@@ -31,6 +33,7 @@ def color(s, fg=None, bg=None, style=None):
         else:
             raise Exception('Invalid color "%s"' % fg)
 
+    # Handle background color
     if bg:
         if bg in COLORS:
             sgr.append(str(40 + COLORS.index(bg)))
@@ -39,6 +42,7 @@ def color(s, fg=None, bg=None, style=None):
         else:
             raise Exception('Invalid color "%s"' % bg)
 
+    # Handle text styles
     if style:
         for st in style.split('+'):
             if st in STYLES:
@@ -48,15 +52,15 @@ def color(s, fg=None, bg=None, style=None):
 
     if sgr:
         prefix = '\x1b[' + ';'.join(sgr) + 'm'
-        suffix = '\x1b[0m'
+        suffix = '\x1b[0m'  # Reset styles
         return prefix + s + suffix
     else:
         return s
 
 def strip_color(s):
-    return re.sub('\x1b\[.+?m', '', s)
+    return re.sub('\x1b\[.+?m', '', s)  # Remove color codes
 
-# Foreground shortcuts
+# Foreground color shortcuts
 black = partial(color, fg='black')
 red = partial(color, fg='red')
 green = partial(color, fg='green')
