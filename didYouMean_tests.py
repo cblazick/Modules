@@ -7,8 +7,9 @@ class DidYouMean_testSuite(unittest.TestCase):
     """
 
     def setUp(self):
-        self.d = ["one", "two", "three", "four", "five"]
-        self.c = didYouMean.DidYouMean(self.d)
+        # add a dictionary of just a few acceptable words
+        dictionary = ["one", "two", "three", "four", "five"]
+        self.c = didYouMean.DidYouMean(dictionary)
 
     def test_edits(self):
         self.assertRaises(TypeError, didYouMean.edits, ())
