@@ -13,17 +13,12 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import re
-
 from functools import partial
 
+__version__ = '2.0.1'
 
-__version__ = '1.0.2'
-
-COLORS = ('black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan',
-          'white')
-STYLES = ('bold', 'faint', 'italic', 'underline', 'blink', 'blink2',
-          'negative', 'concealed', 'crossed')
-
+COLORS = ('black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white')
+STYLES = ('bold', 'faint', 'italic', 'underline', 'blink', 'blink2', 'negative', 'concealed', 'crossed')
 
 def color(s, fg=None, bg=None, style=None):
     sgr = []
@@ -58,10 +53,8 @@ def color(s, fg=None, bg=None, style=None):
     else:
         return s
 
-
 def strip_color(s):
     return re.sub('\x1b\[.+?m', '', s)
-
 
 # Foreground shortcuts
 black = partial(color, fg='black')
@@ -83,3 +76,12 @@ blink2 = partial(color, style='blink2')
 negative = partial(color, style='negative')
 concealed = partial(color, style='concealed')
 crossed = partial(color, style='crossed')
+
+# Example usage
+if __name__ == '__main__':
+    print(red("This is red text"))
+    print(blue("This is blue text with bold", style="bold"))
+    print(yellow("This is yellow text with italic", style="italic"))
+    print(green("This is green text with underline", style="underline"))
+    print(magenta("This is magenta text with bold+underline", style="bold+underline"))
+    print(strip_color(red("This text has color but will be stripped")))
