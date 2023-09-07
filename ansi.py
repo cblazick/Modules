@@ -15,7 +15,7 @@
 import re
 from functools import partial
 
-__version__ = '1.0.2'
+__version__ = '2.0.1'  # Updated version
 
 # Define the available colors and styles
 COLORS = ('black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white')
@@ -29,18 +29,18 @@ def color(s, fg=None, bg=None, style=None):
         if fg in COLORS:
             sgr.append(str(30 + COLORS.index(fg)))
         elif isinstance(fg, int) and 0 <= fg <= 255:
-            sgr.append('38;5;%d' % int(fg))
+            sgr.append(f'38;5;{int(fg)}')
         else:
-            raise Exception('Invalid color "%s"' % fg)
+            raise Exception(f'Invalid color "{fg}"')
 
     # Handle background color
     if bg:
         if bg in COLORS:
             sgr.append(str(40 + COLORS.index(bg)))
         elif isinstance(bg, int) and 0 <= bg <= 255:
-            sgr.append('48;5;%d' % bg)
+            sgr.append(f'48;5;{bg}')
         else:
-            raise Exception('Invalid color "%s"' % bg)
+            raise Exception(f'Invalid color "{bg}"')
 
     # Handle text styles
     if style:
@@ -48,12 +48,12 @@ def color(s, fg=None, bg=None, style=None):
             if st in STYLES:
                 sgr.append(str(1 + STYLES.index(st)))
             else:
-                raise Exception('Invalid style "%s"' % st)
+                raise Exception(f'Invalid style "{st}"')
 
     if sgr:
-        prefix = '\x1b[' + ';'.join(sgr) + 'm'
+        prefix = f'\x1b[{";".join(sgr)}m'
         suffix = '\x1b[0m'  # Reset styles
-        return prefix + s + suffix
+        return f'{prefix}{s}{suffix}'
     else:
         return s
 
