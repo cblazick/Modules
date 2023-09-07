@@ -1,15 +1,15 @@
 import unittest
-import didYouMean
+from didYouMean import didYouMean
 
-class DidYouMean_testSuite(unittest.TestCase):
+class didYouMean_testSuite(unittest.TestCase):
     """
-    testing routines for the DidYouMean module
+    testing routines for the didYouMean module
     """
 
     def setUp(self):
         # add a dictionary of just a few acceptable words
         dictionary = ["one", "two", "three", "four", "five"]
-        self.c = didYouMean.DidYouMean(dictionary)
+        self.c = didYouMean(dictionary)
 
     def test_edits(self):
         self.assertRaises(TypeError, didYouMean.edits, ())
